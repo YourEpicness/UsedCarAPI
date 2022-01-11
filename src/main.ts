@@ -8,6 +8,7 @@ async function bootstrap() {
   // Used to balidate body
   app.useGlobalPipes(
     new ValidationPipe({
+      // Whitelist removes extra non-validated properties
       whitelist: true,
     })
   );
