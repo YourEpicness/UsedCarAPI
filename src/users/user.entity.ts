@@ -6,6 +6,7 @@ import {
   AfterRemove,
   AfterUpdate,
 } from "typeorm";
+import { Exclude } from "class-transformer";
 
 // Step 1: Create an entity that represents the data types
 @Entity()
@@ -17,6 +18,7 @@ export class User {
   email: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   // Hooks: Only executed on entity instance (create) NOT directly passing {}
