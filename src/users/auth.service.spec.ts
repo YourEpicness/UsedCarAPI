@@ -1,4 +1,4 @@
-import { BadRequestException } from "@nestjs/common";
+import { BadRequestException, NotFoundException } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { AuthService } from "./auth.service";
 import { User } from "./user.entity";
@@ -41,9 +41,36 @@ describe("AuthService", () => {
 
   it("throws an error if user signs up with email that is in use", async () => {
     fakeUsersService.find = () =>
-      Promise.resolve([{ id: 1, email: "a", password: "1" } as User]);
+      Promise.resolve([
+        { id: 1, email: "test@test.com", password: "afasfasf" } as User,
+      ]);
+
+    expect.assertions(2);
+
     await expect(
-      service.signup("asdf@asdf.com", "sadf")
+      service.signup("test@test.com", "sadf")
     ).rejects.toBeInstanceOf(BadRequestException);
+
+    await expect(service.signup("test@test.com", "sadf")).rejects.toMatchObject(
+      {
+        message: "Email is already in use",
+      }
+    );
+  });
+
+  it("throws if signin is called with an unused email", async () => {
+    expect.assertions(3);
+
+    await expect(
+      service.signin("test@test.com", "asfasffsa")
+    ).rejects.toBeInstanceOf(NotFoundException);
+
+    await expect(
+      service.signin("test@test.com", "asfasffsa")
+    ).rejects.toHaveProperty("message", "User not found");
+
+    await expect(
+      service.signin("test@test.com", "asfasffsa")
+    ).rejects.toMatchObject({ message: "User not found" });
   });
 });
