@@ -8,6 +8,7 @@ import {
   Query,
   Delete,
   NotFoundException,
+  Session,
 } from "@nestjs/common";
 import { CreateUserDto } from "./dtos/create-user.dto";
 import { UpdateUserDto } from "./dtos/update-user.dto";
@@ -24,6 +25,19 @@ export class UsersController {
     private authService: AuthService
   ) {}
 
+  // Routes for demonstrating sessions
+  @Get("/colors/:color")
+  setColor(@Param("color") color: string, @Session() session: any) {
+    // Store data in session object
+    session.color = color;
+  }
+
+  @Get("/colors")
+  getColor(@Session() session: any) {
+    return session.color;
+  }
+
+  // Main App Logic
   @Post("/signup")
   createUser(@Body() body: CreateUserDto) {
     return this.authService.signup(body.email, body.password);
