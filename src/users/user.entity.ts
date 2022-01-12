@@ -18,7 +18,6 @@ export class User {
   email: string;
 
   @Column()
-  @Exclude()
   password: string;
 
   // Hooks: Only executed on entity instance (create) NOT directly passing {}
