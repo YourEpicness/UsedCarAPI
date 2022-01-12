@@ -16,15 +16,15 @@ describe("Authentication System", () => {
   });
 
   it("handles a signup request", () => {
-    const email = "asdfsaf@asff.com";
+    const _email = "123asd@123.com";
     return request(app.getHttpServer())
       .post("/auth/signup")
-      .send({ email, password: "asffas" })
+      .send({ email: _email, password: "asffas" })
       .expect(201)
       .then((res) => {
         const { id, email } = res.body;
         expect(id).toBeDefined();
-        expect(email).toEqual(email);
+        expect(email).toEqual(_email);
       });
   });
 });
